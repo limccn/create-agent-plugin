@@ -17,6 +17,17 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v4
+      - name: Assert tag matches package version
+        # The publish uses package.json's version — a tag like v0.1.0-rc1
+        # whose version was never bumped (still 0.1.0) would publish the
+        # WRONG version to `latest`. Fail fast instead.
+        run: |
+          TAG="${GITHUB_REF_NAME#v}"
+          PKG=$(node -p "require('./package.json').version")
+          if [ "$TAG" != "$PKG" ]; then
+            echo "::error::tag $GITHUB_REF_NAME != package.json version $PKG — bump package.json + src/plugin/manifest.ts before tagging"
+            exit 1
+          fi
       - uses: actions/setup-node@v4
         with:
           node-version: 22

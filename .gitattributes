@@ -1,0 +1,5 @@
+# The package ships committed files (skills/, identity files, dist/dsh-plugin.js)
+# — line endings must be stable LF across platforms. The npm tarball packs the
+# working copy; CRLF checkouts would corrupt frontmatter parsing and tarball
+# bytes on Windows.
+* text=auto eol=lf

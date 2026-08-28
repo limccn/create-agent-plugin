@@ -16,7 +16,10 @@ const DIR = join(ROOT, "skills", "create-agent-plugin");
 
 describe("generator skill", { skip: !existsSync(DIR) }, () => {
   const FILE = join(DIR, "SKILL.md");
-  const skill = readFileSync(FILE, "utf8");
+  // CRLF-tolerant: Windows checkouts (before .gitattributes normalization)
+  // re-materialize committed LF files as CRLF, which would break the
+  // LF-anchored frontmatter regex.
+  const skill = readFileSync(FILE, "utf8").replace(/\r\n/g, "\n");
   const frontmatter = skill.match(/^---\n([\s\S]*?)\n---/);
   assert.ok(frontmatter, "frontmatter block");
   const meta = Object.fromEntries(
