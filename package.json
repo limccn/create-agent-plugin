@@ -1,6 +1,6 @@
 {
   "name": "@limccn/create-agent-plugin",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "Scaffold an agent plugin (multi-agent installer, MCP tools, hooks) from a battle-tested template — 22 agent targets in minutes.",
   "license": "MIT",
   "type": "module",
