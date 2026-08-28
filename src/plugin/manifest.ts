@@ -10,7 +10,7 @@ import { demoBizCli } from "./cli-business.ts";
 
 export const manifest: PluginManifest = {
   name: "my-agent-plugin",
-  version: "0.1.0-rc2",
+  version: "0.1.0",
   brand: "My Agent Plugin",
   description: "A scaffolded agent plugin: MCP tools + hooks + multi-agent installer.",
   githubSlug: "limccn/my-agent-plugin",
