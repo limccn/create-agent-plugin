@@ -1,0 +1,41 @@
+name: publish
+
+# Dual publish on every `v*` tag (release or prerelease): npmjs + GitHub
+# Packages. A tag like `v0.1.0-rc1` publishes the `0.1.0-rc1` prerelease to
+# the npm `next` dist-tag; `v0.1.0` publishes to `latest`. No tag, no publish.
+on:
+  push:
+    tags: ["v*"]
+  workflow_dispatch: {} # re-run the same tag manually
+
+permissions:
+  contents: read
+  packages: write # GitHub Packages publish
+
+jobs:
+  publish:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          registry-url: https://registry.npmjs.org
+      - run: npm install
+      - run: npm run verify
+      - name: Publish to npmjs
+        # Prerelease versions (contain a `-`) must never take the `latest`
+        # dist-tag — they go to `next` until the real release is tagged.
+        run: |
+          TAG=$(node -p "require('./package.json').version.includes('-') ? 'next' : 'latest'")
+          npm publish --access public --tag "$TAG"
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}
+      - name: Publish to GitHub Packages
+        uses: actions/setup-node@v4
+        with:
+          node-version: 22
+          registry-url: https://npm.pkg.github.com
+      - run: npm publish --registry https://npm.pkg.github.com
+        env:
+          NODE_AUTH_TOKEN: ${{ secrets.GITHUB_TOKEN }}

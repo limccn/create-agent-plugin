@@ -1,0 +1,31 @@
+{
+  "name": "my-agent-plugin",
+  "owner": {
+    "name": "limccn"
+  },
+  "metadata": {
+    "description": "A scaffolded agent plugin: MCP tools + hooks + multi-agent installer.",
+    "version": "0.1.0"
+  },
+  "plugins": [
+    {
+      "name": "my-agent-plugin",
+      "source": ".",
+      "description": "A scaffolded agent plugin: MCP tools + hooks + multi-agent installer.",
+      "version": "0.1.0",
+      "author": {
+        "name": "limccn"
+      },
+      "homepage": "https://github.com/limccn/my-agent-plugin",
+      "repository": "https://github.com/limccn/my-agent-plugin",
+      "license": "MIT",
+      "keywords": [
+        "my-agent-plugin",
+        "mcp",
+        "agent-plugins",
+        "agent-skills",
+        "scaffold"
+      ]
+    }
+  ]
+}

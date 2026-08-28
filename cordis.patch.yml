@@ -1,0 +1,5 @@
+# dsh plugin activation - see package.json "dsh" key.
+- insert:
+    - id: my-agent-plugin
+      name: my-agent-plugin
+      config: {}

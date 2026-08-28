@@ -1,0 +1,19 @@
+{
+  "$schema": "https://agent-plugins.org/schemas/1.0.0/plugin.schema.json",
+  "name": "my-agent-plugin",
+  "version": "0.1.0",
+  "description": "A scaffolded agent plugin: MCP tools + hooks + multi-agent installer.",
+  "author": {
+    "name": "limccn"
+  },
+  "homepage": "https://github.com/limccn/my-agent-plugin",
+  "repository": "https://github.com/limccn/my-agent-plugin",
+  "license": "MIT",
+  "keywords": [
+    "my-agent-plugin",
+    "mcp",
+    "agent-plugins",
+    "agent-skills",
+    "scaffold"
+  ]
+}
