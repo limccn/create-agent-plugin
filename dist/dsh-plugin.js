@@ -147,7 +147,7 @@ var demoBizCli = {
 // src/plugin/manifest.ts
 var manifest = {
   name: "my-agent-plugin",
-  version: "0.1.0-rc1",
+  version: "0.1.0-rc2",
   brand: "My Agent Plugin",
   description: "A scaffolded agent plugin: MCP tools + hooks + multi-agent installer.",
   githubSlug: "limccn/my-agent-plugin",

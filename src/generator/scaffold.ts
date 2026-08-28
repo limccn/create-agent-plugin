@@ -6,7 +6,7 @@
 // Rewrites:
 //  1. src/plugin/manifest.ts  — identity (name/brand/slug/markers) + the
 //     selected capability fields (tools/hook/bizCli/doctorChecks)
-//  2. package.json            — name, bin, description, keywords
+//  2. package.json            — name, bin, description, keywords, version (reset to 0.1.0)
 //  3. src/plugin/targets/index.ts — pruned to the selected target set
 //  4. tests/                  — capability-owned test files removed for
 //     deselected capabilities (target tests self-skip via a runtime guard)
@@ -169,11 +169,15 @@ function rewriteManifest(dir: string, a: GenAnswers): void {
 // ---------------------------------------------------------------- package.json
 
 /** Rewrite package.json: name, bin (short name = last scope segment), the
- *  provided description, and the package name in keywords. */
+ *  provided description, the package name in keywords, and a fresh 0.1.0
+ *  version — the manifest rewrite also resets to 0.1.0, so leaking the
+ *  template's own version (e.g. 0.1.0-rc1) would trip the version-equality
+ *  test in the scaffolded project. */
 function rewritePackageJson(dir: string, a: GenAnswers): void {
   const file = join(dir, "package.json");
   const pkg = JSON.parse(readFileSync(file, "utf8")) as Record<string, unknown>;
   pkg.name = a.packageName;
+  pkg.version = "0.1.0";
   (pkg as { bin: Record<string, string> }).bin = {
     [a.packageName.split("/").pop()!]: "dist/cli.js",
   };
@@ -316,12 +320,19 @@ export async function scaffold(a: GenAnswers, cwd: string): Promise<ScaffoldResu
   // Fill README placeholders (tokens mirror build.mjs vars). Path-ish tokens
   // (skillDir / configDir / hook) take the unscoped short name; {{name}} keeps
   // the full package name (npx commands).
-  const readme = join(dest, "README.md");
-  if (existsSync(readme)) {
+  //
+  // The README template is src/assets/README.md, NOT the package-root
+  // README.md: the copied root README is already filled ({{name}} → the
+  // template's own identity), so a scaffolded project regenerating a new
+  // project would copy a placeholder-free README and keep the OLD identity.
+  // The asset copy always carries placeholders — scaffolded projects copy it
+  // too (src/assets/ ships), so regeneration is identity-safe.
+  const readmeTpl = join(templateRoot, "src", "assets", "README.md");
+  if (existsSync(readmeTpl)) {
     const unscoped = unscopedName(a.packageName);
     writeFileSync(
-      readme,
-      fillTemplate(readFileSync(readme, "utf8"), {
+      join(dest, "README.md"),
+      fillTemplate(readFileSync(readmeTpl, "utf8"), {
         name: a.packageName,
         brand: a.brand,
         version: "0.1.0",
