@@ -91,7 +91,7 @@ test("codex: scoped package name (@scope/xxx) writes a quoted TOML section; idem
   assert.equal(first.status, "ok", first.detail ?? "");
   let t = read(toml)!;
   assert.equal(count(t, '[mcp_servers."@scope/xxx"]'), 1, "quoted header written (legal TOML)");
-  assert.equal(count(t, "@scope/xxx@0.1.0"), 1, "version-pinned npx args");
+  assert.equal(count(t, `@scope/xxx@${manifest.version}`), 1, "version-pinned npx args");
 
   const second = await codex.install(ctx);
   assert.equal(second.status, "ok", second.detail ?? "");
